@@ -194,7 +194,6 @@ loginForm.addEventListener('submit', (e) => {
   // Check hardcoded admin
   if (username === "theravi" && password === "123456") {
     sessionStorage.setItem('loggedIn', 'true');
-    alert("Login Successful!");
     window.location.href = "lms.html";
     return;
   }
@@ -204,7 +203,6 @@ loginForm.addEventListener('submit', (e) => {
   if (matched) {
     sessionStorage.setItem('loggedIn', 'true');
     sessionStorage.setItem('currentUser', username); // optional, track who logged in
-    alert("Login Successful!");
     window.location.href = "lms.html";
   } else {
     alert("Wrong username or password!");
