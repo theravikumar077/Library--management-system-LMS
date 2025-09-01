@@ -1,14 +1,11 @@
 
-  // Redirect to login if not logged in
-  if(sessionStorage.getItem('loggedIn') !== 'true'){
+ if(sessionStorage.getItem('loggedIn') !== 'true'){
     window.location.href = "login.html";
   }
 document.getElementById('logoutBtn').addEventListener('click', ()=>{
     sessionStorage.removeItem('loggedIn');
     window.location.href = "login.html";
   });
-
-
 
   function calcFine(dueDate){
   if(!dueDate) return 0;
@@ -191,7 +188,7 @@ function searchBorrower(){
     BOOKS.filter(matchesFilters).forEach(b=>{
       const catColor = catColorMap[b.category] || 'gray';
       root.insertAdjacentHTML('beforeend', `
-        <div class="book-card bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+        <div class="book-card bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden  ">
           <div class="relative">
             <img src="${b.cover||'https://via.placeholder.com/400x240?text=Book+Cover'}" alt="Cover of ${b.title}" class="w-full h-48 object-cover">
             <div class="absolute top-2 right-2">${statusBadge(b.status)}</div>
@@ -463,11 +460,6 @@ function searchBorrower(){
     renderGrid();
     renderIssuedList();
   }
-
-   document.getElementById('logoutBtn').addEventListener('click', ()=>{
-    sessionStorage.removeItem('loggedIn');
-    window.location.href = "login.html";
-  });
 
   // ---------- Init ----------
   refreshUI();
