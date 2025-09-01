@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMS Login/Signup</title>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Glassmorphism card style */
+    .glass-card {
+      backdrop-filter: blur(15px);
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    /* Floating blobs */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.6;
+      animation: blobMove 20s infinite;
+    }
+    .blob1 { width: 300px; height: 300px; background: #4ade80; top: -50px; left: -50px; animation-delay: 0s; }
+    .blob2 { width: 400px; height: 400px; background: #3b82f6; bottom: -100px; right: -100px; animation-delay: 5s; }
+    .blob3 { width: 200px; height: 200px; background: #06b6d4; top: 50%; left: 70%; animation-delay: 10s; }
+
+    @keyframes blobMove {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(50px, -30px) scale(1.1); }
+      66% { transform: translate(-30px, 50px) scale(0.9); }
+    }
+
+    /* Fade/slide animations */
+    .fade-in { animation: fadeIn 0.5s ease forwards; }
+    .fade-out { animation: fadeOut 0.5s ease forwards; }
+    @keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+    @keyframes fadeOut { from {opacity:1; transform:translateY(0);} to {opacity:0; transform:translateY(-20px);} }
+  </style>
+</head>
+<body class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-black to-black overflow-hidden">
+
+  <!-- Floating Blobs -->
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+
+  <!-- Main Card Container -->
+  <div class="relative z-10 w-full max-w-md p-6 glass-card rounded-3xl shadow-xl text-white">
+
+    <!-- Welcome Card -->
+    <div id="welcomeCard" class="space-y-6 fade-in">
+      <h1 class="text-3xl font-bold text-center">Welcome Back</h1>
+      <p class="text-center text-gray-200">Login or sign up to continue</p>
+      <div class="flex justify-center gap-4">
+        <button id="gotoLogin" class=" text-black px-6 py-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 hover:scale-105 transition">Login</button>
+        <button id="gotoSignup" class="text-black px-6 py-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 hover:scale-105 transition">Sign Up</button>
+      </div>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="hidden space-y-4 fade-in">
+      <h2 class="text-2xl font-bold text-center">Login</h2>
+      <div class="relative">
+        <span class="material-symbols-rounded absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300">person</span>
+        <input type="text" id="loginUsername" placeholder="Username" class="w-full px-10 py-2 rounded-full bg-white/20 placeholder-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+      </div>
+      <div class="relative">
+       
+        <span class="material-symbols-rounded absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300">
+lock
+</span>
+        <input type="password" id="loginPassword" placeholder="Password" class="w-full px-10 py-2 rounded-full bg-white/20 placeholder-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <span class="material-symbols-rounded absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300 cursor-pointer" id="toggleLoginPass">
+visibility
+</span>
+      </div>
+      <button type="submit" class="w-full py-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 hover:scale-105 transition">Login</button>
+      <div class="flex justify-between text-sm">
+        <span class="cursor-pointer text-cyan-300 hover:underline" id="forgotPasswordLink">Forgot Password?</span>
+        <span class="text-gray-300"> or <span class="cursor-pointer text-cyan-300 hover:underline" id="backToSignup">Sign Up</span></span>
+      </div>
+    </form>
+
+    <!-- Signup Form -->
+    <form id="signupForm" class="hidden space-y-4 fade-in">
+      <h2 class="text-2xl font-bold text-center">Sign Up</h2>
+      <div class="relative">
+        <span class="material-symbols-rounded absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300">
+person
+</span>
+        <input type="text" id="signupFullname" placeholder="Full Name" class="w-full px-10 py-2 rounded-full bg-white/20 placeholder-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+      </div>
+      <div class="relative">
+        <span class="material-symbols-rounded  absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300">
+attach_email
+</span>
+        <input type="email" id="signupEmail" placeholder="Email" class="w-full px-10 py-2 rounded-full bg-white/20 placeholder-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+      </div>
+      <div class="relative">
+       
+        <span class="material-symbols-rounded  absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300">
+account_circle
+</span>
+        <input type="text" id="signupUsername" placeholder="Username" class="w-full px-10 py-2 rounded-full bg-white/20 placeholder-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+      </div>
+      <div class="relative">
+
+        <span class="material-symbols-rounded absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300">
+lock
+</span>
+        <input type="password" id="signupPassword" placeholder="Password" class="w-full px-10 py-2 rounded-full bg-white/20 placeholder-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <i class="fa fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300 cursor-pointer" id="toggleSignupPass"></i>
+      </div>
+      <div class="relative">
+        <span class="material-symbols-rounded absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300">
+lock
+</span>
+        <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" class="w-full px-10 py-2 rounded-full bg-white/20 placeholder-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+      </div>
+      <button type="submit" class="w-full py-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 hover:scale-105 transition">Sign Up</button>
+      <div class="text-center text-gray-300 text-sm">
+        Already have an account? <span class="cursor-pointer text-cyan-300 hover:underline" id="backToLogin">Login</span>
+      </div>
+    </form>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-20">
+      <div class="glass-card p-6 rounded-3xl w-80 space-y-4 relative">
+        <h2 class="text-xl font-bold text-center">Reset Password</h2>
+        <input type="email" id="forgotEmail" placeholder="Email" class="w-full px-4 py-2 rounded-full bg-white/20 placeholder-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <button class="w-full py-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 hover:scale-105 transition" id="resetPasswordBtn">Reset</button>
+        <span class="absolute top-3 right-4 cursor-pointer text-gray-200 text-lg" id="closeForgot">&times;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+// --------------------- ELEMENT REFERENCES ---------------------
+const welcomeCard = document.getElementById('welcomeCard');
+const loginForm = document.getElementById('loginForm');
+const signupForm = document.getElementById('signupForm');
+const forgotModal = document.getElementById('forgotPasswordModal');
+
+// Buttons
+const gotoLogin = document.getElementById('gotoLogin');
+const gotoSignup = document.getElementById('gotoSignup');
+const backToLogin = document.getElementById('backToLogin');
+const backToSignup = document.getElementById('backToSignup');
+const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+const closeForgot = document.getElementById('closeForgot');
+
+// Toggle password visibility
+const toggleLoginPass = document.getElementById('toggleLoginPass');
+const loginPassword = document.getElementById('loginPassword');
+const toggleSignupPass = document.getElementById('toggleSignupPass');
+const signupPassword = document.getElementById('signupPassword');
+
+// --------------------- LOCAL STORAGE USERS ---------------------
+const LS_USERS = 'lms_users_v1'; // key for storing users
+function loadUsers() {
+  return JSON.parse(localStorage.getItem(LS_USERS) || '[]');
+}
+function saveUser(user) {
+  const users = loadUsers();
+  users.push(user);
+  localStorage.setItem(LS_USERS, JSON.stringify(users));
+}
+
+// --------------------- FORM VALIDATION ---------------------
+function isEmailValid(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+function isPasswordStrong(password) {
+  return password.length >= 6;
+}
+
+// --------------------- LOGIN FORM ---------------------
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const username = document.getElementById('loginUsername').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+
+  if (!username || !password) {
+    alert("All fields are required!");
+    return;
+  }
+
+  const users = loadUsers();
+
+  // Check hardcoded admin
+  if (username === "theravi" && password === "123456") {
+    sessionStorage.setItem('loggedIn', 'true');
+    alert("Login Successful!");
+    window.location.href = "lms.html";
+    return;
+  }
+
+  // Check stored users
+  const matched = users.find(u => u.username === username && u.password === password);
+  if (matched) {
+    sessionStorage.setItem('loggedIn', 'true');
+    sessionStorage.setItem('currentUser', username); // optional, track who logged in
+    alert("Login Successful!");
+    window.location.href = "lms.html";
+  } else {
+    alert("Wrong username or password!");
+    loginForm.reset();
+  }
+});
+
+// --------------------- SIGNUP FORM ---------------------
+signupForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const fullname = document.getElementById('signupFullname').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const username = document.getElementById('signupUsername').value.trim();
+  const password = document.getElementById('signupPassword').value.trim();
+  const confirmPass = document.getElementById('signupConfirmPassword').value.trim();
+
+  if (!fullname || !email || !username || !password || !confirmPass) {
+    return alert("All fields are required!");
+  }
+  if (!isEmailValid(email)) return alert("Invalid email!");
+  if (!isPasswordStrong(password)) return alert("Password too weak!");
+  if (password !== confirmPass) return alert("Passwords do not match!");
+
+  // Check if username already exists
+  const users = loadUsers();
+  if (users.some(u => u.username === username)) {
+    return alert("Username already taken!");
+  }
+
+  // Save new user
+  saveUser({ fullname, email, username, password });
+  alert("Signup Successful!");
+  signupForm.reset();
+  signupForm.classList.add('hidden');
+  loginForm.classList.remove('hidden');
+});
+
+// --------------------- SHOW/HIDE FORMS ---------------------
+gotoLogin.addEventListener('click', () => {
+  welcomeCard.classList.add('hidden');
+  signupForm.classList.add('hidden');
+  loginForm.classList.remove('hidden');
+});
+backToLogin.addEventListener('click', () => {
+  signupForm.classList.add('hidden');
+  loginForm.classList.remove('hidden');
+});
+gotoSignup.addEventListener('click', () => {
+  welcomeCard.classList.add('hidden');
+  loginForm.classList.add('hidden');
+  signupForm.classList.remove('hidden');
+});
+backToSignup.addEventListener('click', () => {
+  signupForm.classList.remove('hidden');
+  loginForm.classList.add('hidden');
+});
+
+// --------------------- FORGOT PASSWORD ---------------------
+forgotPasswordLink.addEventListener('click', () => forgotModal.classList.remove('hidden'));
+closeForgot.addEventListener('click', () => forgotModal.classList.add('hidden'));
+
+document.getElementById('resetPasswordBtn').addEventListener('click', () => {
+  const email = document.getElementById('forgotEmail').value.trim();
+  if (!email) return alert("Email required!");
+  if (!isEmailValid(email)) return alert("Invalid email!");
+  alert("Password reset link sent (Dummy)");
+  forgotModal.classList.add('hidden');
+});
+
+// --------------------- PASSWORD TOGGLE ---------------------
+toggleLoginPass.addEventListener('click', () => {
+  loginPassword.type = loginPassword.type === 'password' ? 'text' : 'password';
+});
+toggleSignupPass.addEventListener('click', () => {
+  signupPassword.type = signupPassword.type === 'password' ? 'text' : 'password';
+});
+
+// --------------------- AUTO REDIRECT IF ALREADY LOGGED IN ---------------------
+if (sessionStorage.getItem('loggedIn') === 'true') {
+  window.location.href = "lms.html";
+}
+
+ 
+  </script>
+</body>
+</html>

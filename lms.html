@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Library Management System</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+ 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <script>
+    tailwind.config = { darkMode:'class', theme:{ extend:{ colors:{ primary:{50:'#eff6ff',100:'#dbeafe',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',900:'#1e3a8a'} } } } }
+  </script>
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
+  <style>
+    .book-card{transition:.3s all}
+    .book-card:hover{transform:translateY(-5px);box-shadow:0 10px 25px -5px rgba(0,0,0,.1)}
+    .sidebar{transition:.3s all}
+    .notification-badge{position:absolute;top:-5px;right:-5px;min-width:20px;height:20px;border-radius:10px;font-size:12px}
+    .chart-bar{transition:.3s all}
+    .chart-bar:hover{transform:scale(1.05)}
+    @media (max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}}
+    .modal{background:rgba(0,0,0,.4)}
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+    *{
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+ 
+
+  </style>
+</head>
+<body class="bg-gray-200   min-h-screen transition-colors duration-300 dark:bg-[linear-gradient(135deg,#000000,#153677,#4e085f,#000000)]">
+
+  <!-- NAV -->
+ <nav class="fixed w-full z-50 
+            bg-white/10 dark:bg-black/20 
+            backdrop-blur-2xl backdrop-saturate-200 
+            border-b border-white/20 dark:border-white/10
+            shadow-[0_8px_32px_rgba(0,0,0,0.37)]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      
+      <!-- Logo -->
+      <div class="flex items-center">
+        <div class="flex-shrink-0 flex items-center">
+          <i class="fas fa-book-open text-2xl text-purple-500 dark:text-purple-400 mr-2"></i>
+          <span class="text-xl font-bold text-black dark:text-white">LMS Beta</span>
+        </div>
+
+        <!-- Nav links -->
+        <div class="hidden md:ml-6 md:flex md:space-x-8">
+          <a href="#dashboard" class=" dark:hover:text-blue-400 dark:text-white text-black/60 hover:text-primary-600 transform transition-transform duration-200 hover:scale-110 hover:shadow-lg px-3 py-2 text-sm font-medium">Dashboard</a>
+          <a href="#books" class=" dark:hover:text-blue-400 dark:text-white text-black/60 hover:text-primary-600 transform transition-transform duration-200 hover:scale-110 hover:shadow-lg px-3 py-2 text-sm font-medium">Books</a>
+          <a href="#issued" class="dark:hover:text-blue-400 dark:text-white text-black/60 hover:text-primary-600 transform transition-transform duration-200 hover:scale-110 hover:shadow-lg px-3 py-2 text-sm font-medium">Issued</a>
+          <a href="#overdue" class="dark:hover:text-blue-400 dark:text-white text-black/60 hover:text-primary-600 transform transition-transform duration-200 hover:scale-110 hover:shadow-lg px-3 py-2 text-sm font-medium">Overdue</a>
+          <a href="#analytics" class="dark:hover:text-blue-400 dark:text-white text-black/60 hover:text-primary-600 transform transition-transform duration-200 hover:scale-110 hover:shadow-lg px-3 py-2 text-sm font-medium">Analytics</a>
+        </div>
+      </div>
+
+      <!-- Right side -->
+      <div class="flex items-center space-x-4">
+        <button id="themeToggle" 
+                class="p-2 rounded-full bg-white/10 dark:bg-white/10 
+                       text-white/70 hover:bg-white/20 transition">
+          <i class="fas fa-moon hidden dark:block"></i>
+          <i class="fas fa-sun block dark:hidden"></i>
+        </button>
+
+
+
+        <div class="relative">
+          <button class="relative 
+    bg-[linear-gradient(135deg,#ffffff,#dbeafe,#e9d5ff,#ffffff)] 
+    dark:bg-[linear-gradient(135deg,#000000,#153677,#4e085f,#000000)]
+    bg-opacity-60 
+    backdrop-blur-2xl 
+    border border-white/20 
+    text-gray-900 dark:text-gray-100
+   rounded-full px-3 py-2 flex items-center justify-center
+    shadow-[0_20px_50px_rgba(0,0,0,0.25)] 
+    dark:shadow-[0_20px_50px_rgba(0,0,0,0.25)]
+    transform transition duration-500 ease-in-out 
+    hover:scale-110 
+    hover:shadow-[0_20px_50px_rgba(0,0,0,0.35)] 
+    dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.35)]
+    text-xl font-bold">
+            <img src="https://cdn-icons-png.flaticon.com/512/10542/10542486.png" 
+                 alt="User" class="w-8 h-8 rounded-full">
+            <span class="text-sm font-medium text-black hidden md:block dark:text-white">Admin</span>
+    
+          </button>
+        </div>
+
+        <button id="sidebarToggle" 
+                class="md:hidden p-2 rounded-md text-white/70 hover:bg-white/20 transition">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</nav>
+
+
+  <!-- SIDEBAR -->
+  
+
+
+
+  <aside id="sidebar" class="sidebar fixed left-0 top-16 h-screen w-64 bg-black/90 text-gray-300 shadow-lg p-4 flex flex-col space-y-6">
+  <!-- Logo -->
+  <div class="flex items-center space-x-2 text-xl font-semibold">
+    <span class="text-pink-500">✦</span>
+    <span>LMS Beta</span>
+  </div>
+
+  <!-- Section: Main -->
+  <div>
+    <h3 class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">Main</h3>
+    <ul class="flex flex-col space-y-2">
+      <li>
+        <a href="#dashboard"
+           class="flex items-center space-x-3 px-4 py-3 rounded-xl 
+                  bg-white/5 border border-white/10 backdrop-blur-xl
+                  shadow-[0_4px_20px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.1)]
+                  relative overflow-hidden group text-white">
+        <span class="material-symbols-rounded mr-3 text-xl">
+dashboard
+</span>Dashboard
+          <span class="absolute right-0 top-0 w-1 h-full bg-gradient-to-b from-pink-500 to-fuchsia-600 rounded-l-lg"></span>
+        </a>
+      </li>
+
+      <li>
+        <a href="#books"
+           class="flex items-center space-x-3 px-4 py-3 rounded-xl relative overflow-hidden group
+                  hover:bg-white/5 transition text-gray-300 hover:text-white">
+          <span class="material-symbols-rounded mr-3 text-xl">auto_stories</span> Books
+        
+          <span class="absolute right-0 top-0 w-1 h-full bg-gradient-to-b from-pink-500 to-fuchsia-600 rounded-l-lg 
+                       opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+        </a>
+      </li>
+
+
+
+
+
+      <li>
+        <a href="#issued"
+           class="flex items-center space-x-3 px-4 py-3 rounded-xl relative overflow-hidden group
+                  hover:bg-white/5 transition text-gray-300 hover:text-white">
+         <span class="material-symbols-rounded mr-3 text-xl">
+compare_arrows
+</span>Issued
+          <span class="absolute right-0 top-0 w-1 h-full bg-gradient-to-b from-pink-500 to-fuchsia-600 rounded-l-lg 
+                       opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+        </a>
+      </li>
+
+      <li>
+        <a href="#issued"
+           class="flex items-center space-x-3 px-4 py-3 rounded-xl relative overflow-hidden group
+                  hover:bg-white/5 transition text-gray-300 hover:text-white">
+          <span class="material-symbols-rounded mr-3 text-xl">more_time</span>Overdue
+          <span class="absolute right-0 top-0 w-1 h-full bg-gradient-to-b from-pink-500 to-fuchsia-600 rounded-l-lg 
+                       opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Section: Admin -->
+  <div>
+    <h3 class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">Admin</h3>
+    <ul class="flex flex-col space-y-2">
+      <li>
+        <button id="btnOpenAdd"
+           class="flex items-center space-x-3 px-4 py-3 rounded-xl relative overflow-hidden group w-full text-left
+                  hover:bg-white/5 transition text-gray-300 hover:text-white">
+          <i class="fas fa-plus"></i>
+          <span>Add Book</span>
+          <span class="absolute right-0 top-0 w-1 h-full bg-gradient-to-b from-pink-500 to-fuchsia-600 rounded-l-lg 
+                       opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+        </button>
+      </li>
+
+      <li>
+        <a href="#analytics"
+           class="flex items-center space-x-3 px-4 py-3 rounded-xl relative overflow-hidden group
+                  hover:bg-white/5 transition text-gray-300 hover:text-white">
+          <i class="fas fa-chart-bar"></i>
+          <span>Analytics</span>
+          <span class="absolute right-0 top-0 w-1 h-full bg-gradient-to-b from-pink-500 to-fuchsia-600 rounded-l-lg 
+                       opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Section: Account -->
+  <div>
+    <h3 class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">Account</h3>
+    <ul class="flex flex-col space-y-2">
+
+      
+      <li>
+        <a href="#"
+            id="logoutBtn" class="flex items-center space-x-3 px-4 py-3 rounded-xl relative overflow-hidden group
+                  hover:bg-white/5 transition text-red-400 hover:text-white text-red-400">
+<span  class="material-symbols-rounded mr-3 text-xl ">
+logout
+</span>Logout
+          <span id="logoutBtn" class="absolute right-0 top-0 w-1 h-full bg-gradient-to-b from-pink-500 to-fuchsia-600 rounded-l-lg 
+                       opacity-0 group-hover:opacity-100 transition-all duration-300 text-red-400"></span>
+        </a>
+      </li>
+      <li>
+        <a href="#settings"
+           class="flex items-center space-x-3 px-4 py-3 rounded-xl relative overflow-hidden group
+                  hover:bg-white/5 transition text-gray-300 hover:text-white">
+          <span class="material-symbols-rounded mr-3 text-xl">
+settings
+</span>Settings
+          <span class="absolute right-0 top-0 w-1 h-full bg-gradient-to-b from-pink-500 to-fuchsia-600 rounded-l-lg 
+                       opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+        </a>
+     
+
+
+    </ul>
+  </div>
+</aside>
+
+
+
+
+
+
+
+  <!-- MAIN -->
+  <main class="pt-16 md:ml-64 min-h-screen">
+    <div class="p-6 max-w-7xl mx-auto">
+
+      <!-- HEADER -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">Library Dashboard</h1>
+        <p class="text-gray-600 dark:text-gray-300">Your Entire Library. One Click Away.</p>
+      </div>
+
+      <!-- STATS (added fines) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+        <div class="relative 
+bg-white/10 backdrop-blur-2xl 
+border border-white/20 
+text-white 
+rounded-lg p-6 flex items-center 
+shadow-[0_20px_50px_rgba(0,0,0,0.25)] 
+dark:shadow-[0_20px_50px_rgba(255,255,255,0.12)] 
+transform transition duration-500 ease-in-out 
+hover:scale-110 
+hover:bg-gradient-to-r hover:from-purple-500 hover:to-indigo-500 hover:bg-opacity-80 
+hover:shadow-[0_20px_50px_rgba(128,0,255,0.6)] 
+dark:hover:shadow-[0_20px_50px_rgba(128,0,255,0.8)] 
+justify-center text-xl font-bold text-gray-100 ">
+          <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"><span class="material-symbols-rounded  text-xl">auto_stories</span></div>
+          <div class="ml-4"><h2 id="statTotal" class="text-2xl font-bold text-gray-800 dark:text-white">0</h2><p class="text-gray-600 dark:text-gray-300">Total Books</p></div>
+        </div>
+        <div class="relative 
+bg-white/10 backdrop-blur-2xl 
+border border-white/20 
+text-white 
+rounded-lg p-6 flex items-center 
+shadow-[0_20px_50px_rgba(0,0,0,0.25)] 
+dark:shadow-[0_20px_50px_rgba(255,255,255,0.12)] 
+transform transition duration-500 ease-in-out 
+hover:scale-110 
+hover:bg-gradient-to-r hover:from-purple-500 hover:to-indigo-500 hover:bg-opacity-80 
+hover:shadow-[0_20px_50px_rgba(128,0,255,0.6)] 
+dark:hover:shadow-[0_20px_50px_rgba(128,0,255,0.8)] 
+justify-center text-xl font-bold text-gray-100">
+          <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400"><span class="material-symbols-rounded">
+task_alt
+</span></div>
+          <div class="ml-4"><h2 id="statAvailable" class="text-2xl font-bold text-gray-800 dark:text-white">0</h2><p class="text-gray-600 dark:text-gray-300">Available</p></div>
+        </div>
+        <div class="relative 
+bg-white/10 backdrop-blur-2xl 
+border border-white/20 
+text-white 
+rounded-lg p-6 flex items-center 
+shadow-[0_20px_50px_rgba(0,0,0,0.25)] 
+dark:shadow-[0_20px_50px_rgba(255,255,255,0.12)] 
+transform transition duration-500 ease-in-out 
+hover:scale-110 
+hover:bg-gradient-to-r hover:from-purple-500 hover:to-indigo-500 hover:bg-opacity-80 
+hover:shadow-[0_20px_50px_rgba(128,0,255,0.6)] 
+dark:hover:shadow-[0_20px_50px_rgba(128,0,255,0.8)] 
+justify-center text-xl font-bold text-gray-100">
+          <div class="p-3 rounded-full bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400"><span class="material-symbols-rounded text-xl">
+compare_arrows
+</span></div>
+          <div class="ml-4"><h2 id="statIssued" class="text-2xl font-bold text-gray-800 dark:text-white">0</h2><p class="text-gray-600 dark:text-gray-300">Issued</p></div>
+        </div>
+        <div class="relative 
+bg-white/10 backdrop-blur-2xl 
+border border-white/20 
+text-white 
+rounded-lg p-6 flex items-center 
+shadow-[0_20px_50px_rgba(0,0,0,0.25)] 
+dark:shadow-[0_20px_50px_rgba(255,255,255,0.12)] 
+transform transition duration-500 ease-in-out 
+hover:scale-110 
+hover:bg-gradient-to-r hover:from-purple-500 hover:to-indigo-500 hover:bg-opacity-80 
+hover:shadow-[0_20px_50px_rgba(128,0,255,0.6)] 
+dark:hover:shadow-[0_20px_50px_rgba(128,0,255,0.8)] 
+justify-center text-xl font-bold text-gray-100">
+          <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400"><span class="material-symbols-rounded text-xl">more_time</span></div>
+          <div class="ml-4"><h2 id="statOverdue" class="text-2xl font-bold text-gray-800 dark:text-white">0</h2><p class="text-gray-600 dark:text-gray-300">Overdue</p></div>
+        </div>
+
+        <!-- TOTAL FINES -->
+        <div class="relative 
+bg-white/10 backdrop-blur-2xl 
+border border-white/20 
+text-white 
+rounded-lg p-6 flex items-center 
+shadow-[0_20px_50px_rgba(0,0,0,0.25)] 
+dark:shadow-[0_20px_50px_rgba(255,255,255,0.12)] 
+transform transition duration-500 ease-in-out 
+hover:scale-110 
+hover:bg-gradient-to-r hover:from-purple-500 hover:to-indigo-500 hover:bg-opacity-80 
+hover:shadow-[0_20px_50px_rgba(128,0,255,0.6)] 
+dark:hover:shadow-[0_20px_50px_rgba(128,0,255,0.8)] 
+justify-center text-xl font-bold text-gray-100
+ ">
+          <div class="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400"><span class="material-symbols-rounded">
+currency_rupee_circle
+</span></div>
+          <div class="ml-4"><h2 id="statFines" class="text-2xl font-bold text-gray-800 dark:text-white"><span class="material-symbols-rounded">
+currency_rupee
+</span>0</h2><p class="text-gray-600 dark:text-gray-300">Total Fines Collected</p></div>
+        </div>
+      </div>
+
+      <!-- SEARCH + QUICK ACTIONS -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div class="lg:col-span-2 bg-white dark: rounded-lg shadow p-6  relative 
+bg-white/30 backdrop-blur-2xl 
+border border-white/20 
+text-white 
+rounded-lg p-6 ">
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Quick Book Search</h3>
+          <div class="relative">
+            <input id="searchInput" type="text" placeholder="Search books by title, author, or ISBN..." class="w-full px-4 py-3 focus:outline-none border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+            <button id="btnSearch" class="absolute right-2 top-2 bg-primary-600 text-white p-2 rounded-lg hover:bg-primary-700 flex items-center "><i class="fas fa-search"></i></button>
+          </div>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <select id="filterCategory" class="border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white p-3">
+              <option value="">All Categories</option><option>Fiction</option><option>Non-Fiction</option><option>Science</option><option>Technology</option><option>History</option><option>Other</option>
+            </select>
+            <select id="filterStatus" class="border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white p-3">
+              <option value="">All Availability</option><option>Available</option><option>Issued</option><option>Reserved</option><option>Overdue</option>
+            </select>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Quick Actions</h3>
+          <div class="space-y-3">
+            <button id="qaAdd" class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded flex items-center justify-center space-x-2"><i class="fas fa-plus"></i><span>Add New Book</span></button>
+            <button id="qaIssue" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded flex items-center justify-center space-x-2"><span class="material-symbols-rounded text-xl">
+compare_arrows
+</span><span>Issue Book</span></button>
+            <button id="qaReturn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded flex items-center justify-center space-x-2"><span class="material-symbols-rounded">
+amend
+</span><span>Return Book</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECENT + ANALYTICS -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+          <div class="p-6 border-b border-gray-200 dark:border-gray-700"><h3 class="text-lg font-semibold text-gray-800 dark:text-white">Recently Added Books</h3></div>
+          <div id="recentList" class="p-6 space-y-4"></div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+          <div class="p-6 border-b border-gray-200 dark:border-gray-700"><h3 class="text-lg font-semibold text-gray-800 dark:text-white">Library Analytics</h3></div>
+          <div class="p-6 space-y-3" id="analyticsBars"></div>
+        </div>
+      </div>
+
+      <!-- BOOKS GRID -->
+      <section id="books">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Featured Books</h2>
+          <div class="flex space-x-2">
+            <button class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-2"><i class="fas fa-th-large text-gray-600 dark:text-gray-300"></i></button>
+            <button class="bg-primary-600 text-white rounded-lg p-2"><i class="fas fa-list"></i></button>
+          </div>
+        </div>
+        <div id="booksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 "></div>
+      </section>
+
+      <!-- ISSUED SECTION -->
+      <section id="issued" class="mt-12">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Issued / Reserved</h2>
+        <div id="issuedList" class="bg-white dark:bg-gray-800 rounded-lg shadow divide-y divide-gray-100 dark:divide-gray-700"></div>
+      </section>
+    </div>
+
+<!-- BORROWER SEARCH -->
+<section id="borrowerSearch" class="mt-12">
+  <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 ml-7">Search Student Information <span class="material-symbols-rounded">
+arrow_cool_down
+</span></h2>
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+    <div class="flex space-x-3 space-y-3 flex items-center ">
+      <input id="borrowerSearchInput" type="text" placeholder="Enter Student UID ..." class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-900 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:outline-none ">
+      <button onclick="searchBorrower()" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg"><i class="fas fa-search mr-1"></i>Search</button>
+    </div>
+    <div id="borrowerResult" class="space-y-4"></div>
+  </div>
+</section>
+
+
+
+  </main>
+
+  <!-- MODALS -->
+  <!-- Add/Edit Book Modal -->
+  <div id="modalBook" class="hidden fixed inset-0 modal items-center justify-center z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-xl mx-4 p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 id="modalBookTitle" class="text-xl font-semibold text-gray-800 dark:text-white">Add Book</h3>
+        <button data-close="#modalBook" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="formBook" class="space-y-3">
+        <input type="hidden" id="bookId">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div><label class="text-sm text-gray-600 dark:text-gray-300">Title</label><input id="bookTitle" required class="w-full p-2 rounded border dark:border-gray-600 bg-gray-50 dark:bg-gray-700"/></div>
+          <div><label class="text-sm text-gray-600 dark:text-gray-300">Author</label><input id="bookAuthor" required class="w-full p-2 rounded border dark:border-gray-600 bg-gray-50 dark:bg-gray-700"/></div>
+          <div><label class="text-sm text-gray-600 dark:text-gray-300">ISBN</label><input id="bookIsbn" required class="w-full p-2 rounded border dark:border-gray-600 bg-gray-50 dark:bg-gray-700"/></div>
+          <div><label class="text-sm text-gray-600 dark:text-gray-300">Category</label>
+            <select id="bookCategory" class="w-full p-2 rounded border dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+              <option>Fiction</option><option>Non-Fiction</option><option>Science</option><option>Technology</option><option>History</option><option>Other</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2"><label class="text-sm text-gray-600 dark:text-gray-300">Cover Image URL</label><input id="bookCover" class="w-full p-2 rounded border dark:border-gray-600 bg-gray-50 dark:bg-gray-700" placeholder="https://..."/></div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" data-close="#modalBook" class="px-4 py-2 rounded border dark:border-gray-600">Cancel</button>
+          <button class="px-4 py-2 rounded bg-primary-600 text-white hover:bg-primary-700">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- View / Actions Modal -->
+  <div id="modalView" class="hidden fixed inset-0 modal items-center justify-center z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-xl mx-4 p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Book Details</h3>
+        <button data-close="#modalView" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="viewContent" class="space-y-3"></div>
+      <div class="flex justify-between items-center mt-4">
+        <div class="space-x-2">
+          <button id="btnIssue" class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded"><i class="fas fa-exchange-alt mr-1"></i>Issue</button>
+          <button id="btnReserve" class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 rounded"><i class="fas fa-bell mr-1"></i>Reserve</button>
+          <button id="btnReturn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded"><i class="fas fa-undo mr-1"></i>Return</button>
+        </div>
+        <div class="space-x-2">
+          <button id="btnEdit" class="bg-gray-200 dark:bg-gray-700 px-3 py-2 rounded">Edit</button>
+          <button id="btnDelete" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Issue Modal (with Due Date) -->
+  <div id="modalIssue" class="hidden fixed inset-0 modal items-center justify-center z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md mx-4 p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Issue Book</h3>
+        <button data-close="#modalIssue" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="formIssue" class="space-y-3">
+        <label class="text-sm text-gray-600 dark:text-gray-300">ISBN</label>
+        <input id="issueIsbn" required class="w-full p-2 rounded border dark:border-gray-600 bg-gray-50 dark:bg-gray-700"/>
+        <label class="text-sm text-gray-600 dark:text-gray-300">Borrower Name</label>
+        <input id="issueUser" required class="w-full p-2 rounded border dark:border-gray-600 bg-gray-50 dark:bg-gray-700"/>
+        <label class="text-sm text-gray-600 dark:text-gray-300">Due Date</label>
+        <input id="issueDueDate" type="date" required class="w-full p-2 rounded border dark:border-gray-600 bg-gray-50 dark:bg-gray-700"/>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" data-close="#modalIssue" class="px-4 py-2 rounded border dark:border-gray-600">Cancel</button>
+          <button class="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700">Issue</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Return Modal (calculates fine) -->
+  <div id="modalReturn" class="hidden fixed inset-0 modal items-center justify-center z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md mx-4 p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Return Book</h3>
+        <button data-close="#modalReturn" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="formReturn" class="space-y-3">
+        <label class="text-sm text-gray-600 dark:text-gray-300">ISBN</label>
+        <input id="returnIsbn" required class="w-full p-2 rounded border dark:border-gray-600 bg-gray-50 dark:bg-gray-700"/>
+        <div id="calculatedFine" class="text-sm text-gray-600 dark:text-gray-300"></div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" data-close="#modalReturn" class="px-4 py-2 rounded border dark:border-gray-600">Cancel</button>
+          <button class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Return</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script src="script.js"></script>
+</body>
+</html>
