@@ -466,3 +466,15 @@ function searchBorrower(){
 
   // Expose helpers for console testing
   window.LMS = {BOOKS, refreshUI, loadBooks, loadFines:()=>loadFines(), calculateFine};
+
+  // Instant search as you type
+$('#searchInput').addEventListener('input', renderGrid);
+
+// Also work on Enter key
+$('#searchInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    renderGrid();
+  }
+});
+
